@@ -1,0 +1,22 @@
+{
+    "manifest_version": 3,
+    "name": "ProgressTimeBar",
+    "version": "1.0",
+    "description": "Affiche une barre de progression en bas de chaque page web.",
+    "permissions": [
+      "activeTab"
+    ],
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["script/script.js"],
+        "run_at": "document_end"
+      }
+    ],
+    "icons": {
+      "16": "",
+      "48": "",
+      "128": ""
+    }
+  }
+  
