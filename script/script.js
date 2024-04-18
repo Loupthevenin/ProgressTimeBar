@@ -13,6 +13,30 @@ let defaultColorBarBackground = "#242424",
 
 // Pensez a une blacklist de site dont on ne veut pas afficher la progressBar
 
+function whiteStrip(
+  context,
+  lineWidth,
+  colorStroke,
+  centerX,
+  centerY,
+  radius,
+  lineWidth,
+  numLoops
+) {
+  context.save();
+  context.beginPath();
+  context.lineWidth = lineWidth;
+  context.strokeStyle = colorStroke;
+  const step = 0.1;
+  for (let theta = 0; theta < numLoops * 2 * Math.PI; theta += step) {
+    const x = centerX + (radius + theta * 10) * Math.cos(theta);
+    const y = centerY + (radius + theta * 10) * Math.sin(theta);
+    context.lineTo(x, y);
+  }
+  context.stroke();
+  context.restore();
+}
+
 function updateProgressBar() {
   const now = new Date();
   const currentHour = now.getHours();
