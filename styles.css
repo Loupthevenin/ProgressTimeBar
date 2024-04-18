@@ -1,0 +1,24 @@
+#container {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%);
+    width: 99.899%;
+    height: 8px;
+  }
+  
+  #backgroundbar, #progressBar {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+  }
+  
+  #backgroundbar {
+    background-color: #242424;
+  }
+  
+  #progressBar {
+    background-color: #97EF00;
+    width: 10%;
+  }
+  
