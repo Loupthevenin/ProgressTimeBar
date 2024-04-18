@@ -1,14 +1,17 @@
-let defaultColorBar = "#242424",
-  colorProgress = "#97EF00",
-  colorBreak = "#7107B9",
-  widthBar = "99.899%",
-  heightBar = "8px",
+let defaultColorBarBackground = "#242424",
+  defaultColorProgress = "#97EF00",
+  colorProgress,
+  colorBreak = "#FF3100",
+  widthBar = "99%",
+  heightBar = "20px",
   borderRadius = "10px",
   startHour = 8,
   endHour = 17,
   breakHour = 2,
   totalHours = endHour - startHour,
   timerStep = 1 * 1000; // milliseconds
+
+// Pensez a une blacklist de site dont on ne veut pas afficher la progressBar
 
 function updateProgressBar() {
   const now = new Date();
@@ -20,12 +23,25 @@ function updateProgressBar() {
   let progress = (totalSeconds / (totalHours * 3600)) * 100;
   progress = Math.max(0, Math.min(progress, 100));
 
-  console.log(progress);
+  if (currentHour < 11) {
+    colorProgress = defaultColorProgress;
+  } else if (currentHour < 12) {
+    // effet en spiral bande blanche ?
+    colorProgress = "";
+  } else if (currentHour < 14) {
+    colorProgress = colorBreak;
+  } else if (currentHour < 16) {
+    // effet scintillant ?
+    colorProgress = defaultColorProgress;
+  } else if (currentHour < 17) {
+    // multi color + scintillant ?
+    colorProgress = defaultColorProgress;
+  }
+
   progressBar.style.width = progress + "%";
   progressBar.style.backgroundColor = colorProgress;
 }
 
-// La bar apparait que a partir de 08:00 et part a 17:00
 function startBar() {
   const now = new Date();
 
@@ -67,22 +83,23 @@ container.style.left = "50%";
 container.style.transform = "translate(-50%)";
 container.style.width = widthBar;
 container.style.height = heightBar;
-container.style.backgroundColor = defaultColorBar;
+container.style.backgroundColor = defaultColorBarBackground;
 container.style.borderRadius = borderRadius;
 
 // Background CSS
 backgroundbar.style.width = "100%";
 backgroundbar.style.height = "100%";
-backgroundbar.style.backgroundColor = defaultColorBar;
+backgroundbar.style.backgroundColor = defaultColorBarBackground;
 backgroundbar.style.opacity = "0.4";
 backgroundbar.style.borderRadius = borderRadius;
 
 // ProgressBar CSS
 progressBar.style.width = "10%";
 progressBar.style.height = "100%";
-progressBar.style.backgroundColor = colorProgress;
+progressBar.style.backgroundColor = defaultColorProgress;
 progressBar.style.borderRadius = borderRadius;
 
+// ADD ProgressBar FIRST !!!
 container.appendChild(progressBar);
 container.appendChild(backgroundbar);
 document.body.appendChild(container);
