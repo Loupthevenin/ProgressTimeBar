@@ -20,7 +20,6 @@ function whiteStrip(
   centerX,
   centerY,
   radius,
-  lineWidth,
   numLoops
 ) {
   context.save();
@@ -47,6 +46,25 @@ function updateProgressBar() {
   let progress = (totalSeconds / (totalHours * 3600)) * 100;
   progress = Math.max(0, Math.min(progress, 100));
 
+  // WhiteStrip
+  const context = canvas.getContext("2d");
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2;
+  const radius = Math.min(centerX, centerY) - 10;
+  const lineWidth = 2;
+
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
+  whiteStrip(
+    context,
+    lineWidth,
+    "#FFFFFF",
+    centerX,
+    centerY,
+    radius,
+    (progress / 100) * 3
+  );
+
   if (currentHour < 11) {
     colorProgress = defaultColorProgress;
   } else if (currentHour < 12) {
@@ -69,11 +87,13 @@ function updateProgressBar() {
 function startBar() {
   const now = new Date();
 
+  // TODO desactiver la progressBar
   if (now.getHours() >= endHour) {
     console.log("Hors temps");
     return;
   }
 
+  // TODO desactiver la progressBar
   if (now.getHours() < startHour) {
     const millisecondsUntilStart =
       new Date(now.getFullYear(), now.getMonth(), now.getDate(), startHour) -
@@ -127,5 +147,10 @@ progressBar.style.borderRadius = borderRadius;
 container.appendChild(progressBar);
 container.appendChild(backgroundbar);
 document.body.appendChild(container);
+
+const canvas = document.createElement("canvas");
+canvas.width = widthBar;
+canvas.height = heightBar;
+container.appendChild(canvas);
 
 startBar();
