@@ -13,27 +13,24 @@ let defaultColorBarBackground = "#242424",
 
 // Pensez a une blacklist de site dont on ne veut pas afficher la progressBar
 
-function whiteStrip(
-  context,
-  lineWidth,
-  colorStroke,
-  centerX,
-  centerY,
-  radius,
-  numLoops
-) {
-  context.save();
-  context.beginPath();
-  context.lineWidth = lineWidth;
-  context.strokeStyle = colorStroke;
-  const step = 0.1;
-  for (let theta = 0; theta < numLoops * 2 * Math.PI; theta += step) {
-    const x = centerX + (radius + theta * 10) * Math.cos(theta);
-    const y = centerY + (radius + theta * 10) * Math.sin(theta);
-    context.lineTo(x, y);
-  }
-  context.stroke();
-  context.restore();
+function addSparkleEffect() {
+  progressBar.classList.add("sparkle");
+  progressBar.style.animation = "sparkle 1s infinite";
+}
+
+function removeSparkleEffect() {
+  progressBar.classList.remove("sparkle");
+  progressBar.style.animation = "none";
+}
+
+function addDynamicSpiralEffect() {
+  progressBar.classList.add("dynamic-spiral");
+  progressBar.style.animation = "dynamic-spiral 2s linear infinite";
+}
+
+function removeDynamicSpiralEffect() {
+  progressBar.classList.remove("dynamic-spiral");
+  progressBar.style.animation = "none";
 }
 
 function updateProgressBar() {
@@ -45,25 +42,6 @@ function updateProgressBar() {
     (currentHour - startHour) * 3600 + currentMinute * 60 + currentSecond;
   let progress = (totalSeconds / (totalHours * 3600)) * 100;
   progress = Math.max(0, Math.min(progress, 100));
-
-  // WhiteStrip
-  const context = canvas.getContext("2d");
-  const centerX = canvas.width / 2;
-  const centerY = canvas.height / 2;
-  const radius = Math.min(centerX, centerY) - 10;
-  const lineWidth = 2;
-
-  context.clearRect(0, 0, canvas.width, canvas.height);
-
-  whiteStrip(
-    context,
-    lineWidth,
-    "#FFFFFF",
-    centerX,
-    centerY,
-    radius,
-    (progress / 100) * 3
-  );
 
   if (currentHour < 11) {
     colorProgress = defaultColorProgress;
@@ -80,6 +58,7 @@ function updateProgressBar() {
     colorProgress = defaultColorProgress;
   }
 
+  addSparkleEffect();
   progressBar.style.width = progress + "%";
   progressBar.style.backgroundColor = colorProgress;
 }
@@ -147,10 +126,5 @@ progressBar.style.borderRadius = borderRadius;
 container.appendChild(progressBar);
 container.appendChild(backgroundbar);
 document.body.appendChild(container);
-
-const canvas = document.createElement("canvas");
-canvas.width = widthBar;
-canvas.height = heightBar;
-container.appendChild(canvas);
 
 startBar();
