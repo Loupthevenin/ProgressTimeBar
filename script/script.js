@@ -11,26 +11,37 @@ let defaultColorBarBackground = "#242424",
   totalHours = endHour - startHour,
   timerStep = 1 * 1000; // milliseconds
 
+const element_containerID = document.getElementById("container_bar"),
+  element_progressID = document.getElementById("progress_bar");
+
 // Pensez a une blacklist de site dont on ne veut pas afficher la progressBar
 
 function addSparkleEffect() {
-  progressBar.classList.add("sparkle");
-  progressBar.style.animation = "sparkle 1s infinite";
+  element_progressID.classList.add("sparkle");
+  element_progressID.style.animation = "sparkle 1s infinite";
 }
 
 function removeSparkleEffect() {
-  progressBar.classList.remove("sparkle");
-  progressBar.style.animation = "none";
+  element_progressID.classList.remove("sparkle");
+  element_progressID.style.animation = "none";
 }
 
 function addDynamicSpiralEffect() {
-  progressBar.classList.add("dynamic-spiral");
-  progressBar.style.animation = "dynamic-spiral 2s linear infinite";
+  element_progressID.classList.add("dynamic-spiral");
+  element_progressID.style.animation = "dynamic-spiral 2s linear infinite";
 }
 
 function removeDynamicSpiralEffect() {
-  progressBar.classList.remove("dynamic-spiral");
-  progressBar.style.animation = "none";
+  element_progressID.classList.remove("dynamic-spiral");
+  element_progressID.style.animation = "none";
+}
+
+function disableProgressBar() {
+  element_containerID.style.display = "none";
+}
+
+function activateProgressBar() {
+  element_containerID.style.display = "";
 }
 
 function updateProgressBar() {
@@ -40,6 +51,7 @@ function updateProgressBar() {
   const currentSecond = now.getSeconds();
   const totalSeconds =
     (currentHour - startHour) * 3600 + currentMinute * 60 + currentSecond;
+
   let progress = (totalSeconds / (totalHours * 3600)) * 100;
   progress = Math.max(0, Math.min(progress, 100));
 
@@ -59,20 +71,19 @@ function updateProgressBar() {
   }
 
   addSparkleEffect();
-  progressBar.style.width = progress + "%";
-  progressBar.style.backgroundColor = colorProgress;
+  element_progressID.style.width = progress + "%";
+  element_progressID.style.backgroundColor = colorProgress;
 }
 
 function startBar() {
   const now = new Date();
 
-  // TODO desactiver la progressBar
   if (now.getHours() >= endHour) {
     console.log("Hors temps");
+    disableProgressBar();
     return;
   }
 
-  // TODO desactiver la progressBar
   if (now.getHours() < startHour) {
     const millisecondsUntilStart =
       new Date(now.getFullYear(), now.getMonth(), now.getDate(), startHour) -
@@ -80,6 +91,7 @@ function startBar() {
 
     setTimeout(startBar, millisecondsUntilStart);
     console.log("Hors temps");
+    disableProgressBar();
     return;
   }
 
@@ -95,36 +107,4 @@ function startBar() {
   }, timerStep);
 }
 
-const container = document.createElement("div");
-const backgroundbar = document.createElement("div");
-const progressBar = document.createElement("div");
-
-// Container CSS
-container.style.position = "fixed";
-container.style.bottom = "0";
-container.style.left = "50%";
-container.style.transform = "translate(-50%)";
-container.style.width = widthBar;
-container.style.height = heightBar;
-container.style.backgroundColor = defaultColorBarBackground;
-container.style.borderRadius = borderRadius;
-
-// Background CSS
-backgroundbar.style.width = "100%";
-backgroundbar.style.height = "100%";
-backgroundbar.style.backgroundColor = defaultColorBarBackground;
-backgroundbar.style.opacity = "0.4";
-backgroundbar.style.borderRadius = borderRadius;
-
-// ProgressBar CSS
-progressBar.style.width = "10%";
-progressBar.style.height = "100%";
-progressBar.style.backgroundColor = defaultColorProgress;
-progressBar.style.borderRadius = borderRadius;
-
-// ADD ProgressBar FIRST !!!
-container.appendChild(progressBar);
-container.appendChild(backgroundbar);
-document.body.appendChild(container);
-
-startBar();
+// startBar();
