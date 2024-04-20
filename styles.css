@@ -1,53 +1,19 @@
-/* Animation scintillement */
-@keyframes sparkle {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-/* Animation spirale dynamique */
-@keyframes dynamic-spiral {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-* {
-  background-color: #000000;
-}
-
-#container_bar {
+#background_bar {
   position: fixed;
-  bottom: 0;
+  bottom: 10%;
   left: 50%;
   transform: translate(-50%);
   width: 99%;
   height: 20px;
   background-color: #242424;
   border-radius: 10px;
+  /* padding: 8px; */
 }
 
 #progress_bar {
-  width: 100%;
+  width: 50%;
   height: 100%;
   background-color: #97ef00;
-  border-radius: 10px;
-}
-
-#background_bar {
-  width: 100%;
-  height: 100%;
-  background-color: #242424;
-  opacity: 0.4;
   border-radius: 10px;
 }
 
@@ -68,7 +34,7 @@
   ); */
   animation: glowing-multi-colors 20s linear infinite;
   background-size: 500%;
-  filter: blur(20px);
+  filter: blur(5px);
 }
 
 @keyframes glowing-multi-colors {
@@ -77,5 +43,26 @@
   }
   0% {
     background-position: 500% 0;
+  }
+}
+/* TODO Fix stripe */
+.stripe {
+  background: linear-gradient(
+    20deg,
+    rgba(255, 255, 255, 0.5) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0.5) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 150px;
+  animation: a 0.5s linear infinite;
+}
+
+@keyframes stripe {
+  100% {
+    background-position: 150px 0px;
   }
 }

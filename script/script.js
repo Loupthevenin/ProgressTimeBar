@@ -11,37 +11,19 @@ let defaultColorBarBackground = "#242424",
   totalHours = endHour - startHour,
   timerStep = 1 * 1000; // milliseconds
 
-const element_containerID = document.getElementById("container_bar"),
+const element_backgroundID = document.getElementById("background_bar"),
   element_progressID = document.getElementById("progress_bar");
 
 // Pensez a une blacklist de site dont on ne veut pas afficher la progressBar
 
-function addSparkleEffect() {
-  element_progressID.classList.add("sparkle");
-  element_progressID.style.animation = "sparkle 1s infinite";
-}
-
-function removeSparkleEffect() {
-  element_progressID.classList.remove("sparkle");
-  element_progressID.style.animation = "none";
-}
-
-function addDynamicSpiralEffect() {
-  element_progressID.classList.add("dynamic-spiral");
-  element_progressID.style.animation = "dynamic-spiral 2s linear infinite";
-}
-
-function removeDynamicSpiralEffect() {
-  element_progressID.classList.remove("dynamic-spiral");
-  element_progressID.style.animation = "none";
-}
+// TODO Desactiver pendant certain jour : weekend etc
 
 function disableProgressBar() {
-  element_containerID.style.display = "none";
+  element_backgroundID.style.display = "none";
 }
 
 function activateProgressBar() {
-  element_containerID.style.display = "";
+  element_backgroundID.style.display = "";
 }
 
 function updateProgressBar() {
@@ -55,6 +37,7 @@ function updateProgressBar() {
   let progress = (totalSeconds / (totalHours * 3600)) * 100;
   progress = Math.max(0, Math.min(progress, 100));
 
+  // TODO Different popup event
   if (currentHour < 11) {
     colorProgress = defaultColorProgress;
   } else if (currentHour < 12) {
