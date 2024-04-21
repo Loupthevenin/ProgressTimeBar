@@ -3,7 +3,7 @@
   bottom: 10%;
   left: 50%;
   transform: translate(-50%);
-  width: 99%;
+  width: 90%;
   height: 20px;
   background-color: #242424;
   border-radius: 10px;
@@ -15,6 +15,17 @@
   height: 100%;
   background-color: #97ef00;
   border-radius: 10px;
+}
+
+/* TODO hover click blur + push */
+#background_bar:hover {
+  box-shadow: 0 0 10px #0f0;
+  filter: blur(1px);
+}
+
+#progress_bar:hover {
+  background-color: #0f0;
+  filter: blur(1px);
 }
 
 .glowing-multi-colors {
@@ -45,6 +56,7 @@
     background-position: 500% 0;
   }
 }
+
 /* TODO Fix stripe */
 .stripe {
   background: linear-gradient(
@@ -57,12 +69,15 @@
     transparent 75%,
     transparent
   );
-  background-size: 150px;
-  animation: a 0.5s linear infinite;
+  background-size: 400px;
+  animation: stripe 0.5s linear infinite;
 }
 
 @keyframes stripe {
+  0% {
+    background-position-x: 0px;
+  }
   100% {
-    background-position: 150px 0px;
+    background-position-x: 400px;
   }
 }
