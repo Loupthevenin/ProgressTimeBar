@@ -8,7 +8,7 @@
     color: #fff;
     padding: 5px;
     border-radius: 5px;
-    white-space: nowrap;
+    /* white-space: nowrap; */
     opacity: 0;
     transition: transform 1.8s ease, opacity 1.8s ease;
 }
@@ -36,16 +36,11 @@
   height: 100%;
   background-color: #97ef00;
   border-radius: 10px;
+  transition: background-color 0.3s ease;
 }
 
-/* TODO hover click blur */
 #background_bar:hover {
-  box-shadow: 0 0 10px #0f0;
-  filter: blur(1px);
-}
-
-#progress_bar:hover {
-  background-color: #0f0;
+  box-shadow: 0 0 10px #97ef00;
   filter: blur(1px);
 }
 

@@ -5,6 +5,8 @@ let defaultColorBarBackground = "#242424",
   widthBar = "99%",
   heightBar = "20px",
   borderRadius = "10px",
+  morning = 4,
+  afternoon = 3,
   startHour = 8,
   endHour = 17,
   breakHour = 2,
@@ -37,20 +39,33 @@ function timerProgressDict() {
   const totalSeconds =
     (currentHour - startHour) * 3600 + currentMinute * 60 + currentSecond;
 
-  let progress = (totalSeconds / (totalHours * 3600)) * 100;
-  progress = Math.max(0, Math.min(progress, 100));
+  let progressTotal = (totalSeconds / (totalHours * 3600)) * 100;
+  progressTotal = Math.max(0, Math.min(progressTotal, 100));
 
-  return { currentHour: currentHour, progressPercent: progress };
+  let progressBreak =
+    (totalSeconds / ((totalHours - (breakHour + afternoon)) * 3600)) * 100;
+
+  return {
+    currentHour: currentHour,
+    progressTotal: progressTotal,
+    progressBreak: progressBreak,
+  };
 }
 
 // Print Timer
 element_backgroundID.addEventListener("mouseover", function (event) {
   const timer = timerProgressDict();
-  const progress = timer.progressPercent;
+  const progress = timer.progressTotal;
+  const progressBreak = timer.progressBreak;
+
+  let contentBreak =
+    progressBreak > 100
+      ? ""
+      : `* ${progressBreak.toFixed(2)} / 100% avant midi`;
 
   document.getElementById("timer").textContent = `${progress.toFixed(
     2
-  )} / 100%`;
+  )} / 100% ${contentBreak}`;
   document.getElementById("timer").classList.add("show");
 });
 element_backgroundID.addEventListener("mouseout", function () {
@@ -60,7 +75,7 @@ element_backgroundID.addEventListener("mouseout", function () {
 function updateProgressBar() {
   const timer = timerProgressDict();
   const currentHour = timer.currentHour;
-  const progress = timer.progressPercent;
+  const progress = timer.progressTotal;
 
   // TODO Different popup event
   if (currentHour < 11) {
