@@ -6,23 +6,23 @@
     "permissions": [
       "activeTab",
       "storage",
-      "action"
+      "scripting"
     ],
     "content_scripts": [
       {
         "matches": ["<all_urls>"],
-        "js": ["script/script.js"],
+        "js": ["script/inject_html.js", "script/script.js"],
         "run_at": "document_end"
       }
     ],
-    "icons": {
-      "16": "",
-      "48": "",
-      "128": ""
-    },
+    "web_accessible_resources": [
+      {
+        "resources": ["index.html", "styles.css"],
+        "matches": ["<all_urls>"]
+      }
+    ],
     "action": {
-      "default_popup": ["popup/popup.html"],
-      "default_icon": "",
+      "default_popup": "popup/popup.html",
       "default_title": "Options ProgressTimeBar"
     }
   }
