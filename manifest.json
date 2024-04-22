@@ -4,7 +4,9 @@
     "version": "1.0",
     "description": "Affiche une barre de progression en bas de chaque page web.",
     "permissions": [
-      "activeTab"
+      "activeTab",
+      "storage",
+      "action"
     ],
     "content_scripts": [
       {
@@ -17,6 +19,11 @@
       "16": "",
       "48": "",
       "128": ""
+    },
+    "action": {
+      "default_popup": ["popup/popup.html"],
+      "default_icon": "",
+      "default_title": "Options ProgressTimeBar"
     }
   }
   
