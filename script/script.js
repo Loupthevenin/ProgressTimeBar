@@ -26,8 +26,11 @@ function activateProgressBar() {
   element_backgroundID.style.display = "";
 }
 
-function updateProgressBar() {
+function timerProgressDict() {
   const now = new Date();
+  const currentDay = now.getDate();
+  const currentMonth = now.getMonth();
+
   const currentHour = now.getHours();
   const currentMinute = now.getMinutes();
   const currentSecond = now.getSeconds();
@@ -36,6 +39,28 @@ function updateProgressBar() {
 
   let progress = (totalSeconds / (totalHours * 3600)) * 100;
   progress = Math.max(0, Math.min(progress, 100));
+
+  return { currentHour: currentHour, progressPercent: progress };
+}
+
+// Print Timer
+element_backgroundID.addEventListener("mouseover", function (event) {
+  const timer = timerProgressDict();
+  const progress = timer.progressPercent;
+
+  document.getElementById("timer").textContent = `${progress.toFixed(
+    2
+  )} / 100%`;
+  document.getElementById("timer").classList.add("show");
+});
+element_backgroundID.addEventListener("mouseout", function () {
+  document.getElementById("timer").classList.remove("show");
+});
+
+function updateProgressBar() {
+  const timer = timerProgressDict();
+  const currentHour = timer.currentHour;
+  const progress = timer.progressPercent;
 
   // TODO Different popup event
   if (currentHour < 11) {
@@ -50,12 +75,11 @@ function updateProgressBar() {
     colorProgress = defaultColorProgress;
   } else if (currentHour < 17) {
     // multi color + scintillant ?
-    colorProgress = defaultColorProgress;
+    element_progressID.classList = [];
+    element_progressID.classList.add("glowing-multi-colors");
   }
 
-  addSparkleEffect();
   element_progressID.style.width = progress + "%";
-  element_progressID.style.backgroundColor = colorProgress;
 }
 
 function startBar() {
@@ -90,4 +114,4 @@ function startBar() {
   }, timerStep);
 }
 
-// startBar();
+startBar();
