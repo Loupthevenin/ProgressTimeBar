@@ -9,13 +9,15 @@ let defaultColorBarBackground = "#242424",
   totalHours = endHour - startHour,
   timerStep = 1 * 1000; // milliseconds
 
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  console.log(message.config);
+});
+
 // Pensez a une blacklist de site dont on ne veut pas afficher la progressBar
 const element_backgroundID = document.getElementById("background_bar"),
   element_progressID = document.getElementById("progress_bar");
-// TODO Desactiver pendant certain jour : weekend etc
 
-console.log(element_backgroundID);
-console.log(element_progressID);
+// TODO Desactiver pendant certain jour : weekend etc
 
 function disableProgressBar() {
   element_backgroundID.style.display = "none";
@@ -51,7 +53,6 @@ function timerProgressDict() {
 
 // Print Timer
 element_backgroundID.addEventListener("mouseover", function (event) {
-  console.log("ICI");
   const timer = timerProgressDict();
   const progress = timer.progressTotal;
   const progressBreak = timer.progressBreak;
@@ -91,8 +92,6 @@ function updateProgressBar() {
     element_progressID.classList = [];
     element_progressID.classList.add("glowing-multi-colors");
   }
-
-  console.log(progress);
 
   element_progressID.style.width = progress + "%";
 }
