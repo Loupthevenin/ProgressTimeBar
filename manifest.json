@@ -11,13 +11,13 @@
     "content_scripts": [
       {
         "matches": ["<all_urls>"],
-        "js": ["script/inject_html.js", "script/script.js"],
+        "js": ["script/inject_html.js"],
         "run_at": "document_end"
       }
     ],
     "web_accessible_resources": [
       {
-        "resources": ["index.html", "styles.css"],
+        "resources": ["index.html", "styles.css", "script/script.js"],
         "matches": ["<all_urls>"]
       }
     ],
