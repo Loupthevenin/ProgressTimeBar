@@ -1,3 +1,9 @@
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  window.postMessage({ config: message.config });
+
+  sendResponse({ success: true, message: "Donnees mises à jour avec succès" });
+});
+
 fetch(chrome.runtime.getURL("index.html"))
   .then((response) => response.text())
   .then((html) => {
