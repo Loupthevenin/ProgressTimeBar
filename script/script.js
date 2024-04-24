@@ -1,22 +1,16 @@
 let colorProgress;
-
-window.myData = {
-  config: {
-    defaultColorProgress: "#97EF00",
-    morning: 4,
-    afternoon: 3,
-    startHour: 8,
-    endHour: 17,
-    breakHour: 2,
-    timerStep: 1000,
-  },
+config = {
+  defaultColorProgress: "#97EF00",
+  morning: 4,
+  afternoon: 3,
+  startHour: 8,
+  endHour: 17,
+  breakHour: 2,
+  timerStep: 1000,
 };
-
-let config = window.myData.config;
 
 window.addEventListener("message", function (event) {
   if (event.source === window && event.data.config) {
-    console.log("donnee recu :", event.data.config);
     handleConfigChange(event.data.config);
 
     event.source.postMessage(
@@ -27,12 +21,13 @@ window.addEventListener("message", function (event) {
 });
 
 // Pensez a une blacklist de site dont on ne veut pas afficher la progressBar
+
 const element_backgroundID = document.getElementById("background_bar"),
   element_progressID = document.getElementById("progress_bar");
 
 // TODO Desactiver pendant certain jour : weekend etc
+
 function handleConfigChange(newConfig) {
-  console.log(newConfig);
   config.startHour = newConfig.startHour;
   config.endHour = newConfig.endHour;
   config.morning = newConfig.morning;
@@ -88,7 +83,7 @@ element_backgroundID.addEventListener("mouseover", function (event) {
   const progressBreak = timer.progressBreak;
 
   let contentBreak =
-    progressBreak > 100
+    progressBreak > 100 && progress > 0
       ? ""
       : `* ${progressBreak.toFixed(2)} / 100% avant midi`;
 
@@ -107,17 +102,21 @@ function updateProgressBar() {
   const progress = timer.progressTotal;
 
   // TODO Different popup event
-  if (currentHour < 11) {
+  // TODO Penser a mettre en evidence la pause du midi dans le background_bar
+  if (currentHour < config.startHour + config.morning - 1) {
     colorProgress = config.defaultColorProgress;
-  } else if (currentHour < 12) {
+  } else if (currentHour < config.startHour + config.morning) {
     // effet en spiral bande blanche ?
     colorProgress = "";
-  } else if (currentHour < 14) {
+  } else if (
+    currentHour <
+    config.startHour + config.morning + config.breakHour
+  ) {
     colorProgress = config.colorBreak;
-  } else if (currentHour < 16) {
+  } else if (currentHour < config.endHour - 1) {
     // effet scintillant ?
     colorProgress = config.defaultColorProgress;
-  } else if (currentHour < 17) {
+  } else if (currentHour < config.endHour) {
     // multi color + scintillant ?
     element_progressID.classList = [];
     element_progressID.classList.add("glowing-multi-colors");
