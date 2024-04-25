@@ -1,4 +1,3 @@
-let colorProgress;
 config = {
   defaultColorProgress: "#97EF00",
   morning: 4,
@@ -7,6 +6,7 @@ config = {
   endHour: 17,
   breakHour: 2,
   timerStep: 1000,
+  colorBreak: "#DC143C",
 };
 
 window.addEventListener("message", function (event) {
@@ -101,21 +101,37 @@ function updateProgressBar() {
   const currentHour = timer.currentHour;
   const progress = timer.progressTotal;
 
+  const percentBreak12 =
+    (config.morning / (config.endHour - config.startHour)) * 100;
+  const percentBreak14 =
+    ((config.morning + config.breakHour) /
+      (config.endHour - config.startHour)) *
+    100;
+
+  element_backgroundID.style.background = `linear-gradient(to right, #242424 0%, #242424 ${percentBreak12.toFixed(
+    2
+  )}%, ${config.colorBreak} ${percentBreak12.toFixed(2)}%, ${
+    config.colorBreak
+  } ${percentBreak14.toFixed(2)}%, #242424 ${percentBreak14.toFixed(
+    2
+  )}%, #242424 100%)`;
+
   // TODO Different popup event
-  // TODO Penser a mettre en evidence la pause du midi dans le background_bar
   if (currentHour < config.startHour + config.morning - 1) {
-    colorProgress = config.defaultColorProgress;
+    element_progressID.classList = [];
   } else if (currentHour < config.startHour + config.morning) {
-    // effet en spiral bande blanche ?
-    colorProgress = "";
+    element_progressID.classList = [];
+    element_progressID.classList.add("stripe");
   } else if (
     currentHour <
     config.startHour + config.morning + config.breakHour
   ) {
-    colorProgress = config.colorBreak;
+    element_progressID.classList = [];
+    element_progressID.style.backgroundColor = config.colorBreak;
   } else if (currentHour < config.endHour - 1) {
     // effet scintillant ?
-    colorProgress = config.defaultColorProgress;
+    element_progressID.classList = [];
+    element_progressID.style.backgroundColor = config.defaultColorProgress;
   } else if (currentHour < config.endHour) {
     // multi color + scintillant ?
     element_progressID.classList = [];
