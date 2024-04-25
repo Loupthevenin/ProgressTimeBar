@@ -3,12 +3,14 @@ chrome.action.onClicked.addListener(() => {
 });
 
 let config = {
-  startHour: 8,
-  endHour: 17,
+  defaultColorProgress: "#97EF00",
   morning: 4,
   afternoon: 3,
+  startHour: 8,
+  endHour: 17,
   breakHour: 2,
   timerStep: 1 * 1000,
+  colorBreak: "#DC143C",
 };
 
 function sendMessage_toInject(config) {
@@ -24,15 +26,16 @@ function sendMessage_toInject(config) {
 }
 
 function loadValues() {
-  document.getElementById("startHour").value = config.startHour;
-  document.getElementById("endHour").value = config.endHour;
   document.getElementById("morning").value = config.morning;
   document.getElementById("afternoon").value = config.afternoon;
+  document.getElementById("startHour").value = config.startHour;
+  document.getElementById("endHour").value = config.endHour;
   document.getElementById("breakHour").value = config.breakHour;
   document.getElementById("timerStep").value = config.timerStep;
 }
 
 function saveValues() {
+  console.log(config);
   config.startHour = document.getElementById("startHour").value;
   config.endHour = document.getElementById("endHour").value;
   config.morning = document.getElementById("morning").value;
@@ -43,6 +46,8 @@ function saveValues() {
   chrome.storage.local.set({ config: config }, function () {
     console.log("Les valeurs ont été enregistrées avec succès !");
   });
+
+  console.log(config);
 
   sendMessage_toInject(config);
 }

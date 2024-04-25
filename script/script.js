@@ -1,4 +1,4 @@
-config = {
+let config = {
   defaultColorProgress: "#97EF00",
   morning: 4,
   afternoon: 3,
@@ -17,6 +17,8 @@ window.addEventListener("message", function (event) {
       { success: true, message: "Donnée mise à jour" },
       event.origin
     );
+
+    breakBackgroundStyle();
   }
 });
 
@@ -28,12 +30,31 @@ const element_backgroundID = document.getElementById("background_bar"),
 // TODO Desactiver pendant certain jour : weekend etc
 
 function handleConfigChange(newConfig) {
-  config.startHour = newConfig.startHour;
-  config.endHour = newConfig.endHour;
+  config.defaultColorProgress = newConfig.defaultColorProgress;
   config.morning = newConfig.morning;
   config.afternoon = newConfig.afternoon;
+  config.startHour = newConfig.startHour;
+  config.endHour = newConfig.endHour;
   config.breakHour = newConfig.breakHour;
   config.timerStep = newConfig.timerStep;
+  config.colorBreak = newConfig.colorBreak;
+}
+
+function breakBackgroundStyle() {
+  const percentBreak12 =
+    (config.morning / (config.endHour - config.startHour)) * 100;
+  const percentBreak14 =
+    ((config.morning + config.breakHour) /
+      (config.endHour - config.startHour)) *
+    100;
+
+  element_backgroundID.style.background = `linear-gradient(to right, #242424 0%, #242424 ${percentBreak12.toFixed(
+    2
+  )}%, ${config.colorBreak} ${percentBreak12.toFixed(2)}%, ${
+    config.colorBreak
+  } ${percentBreak14.toFixed(2)}%, #242424 ${percentBreak14.toFixed(
+    2
+  )}%, #242424 100%)`;
 }
 
 function disableProgressBar() {
@@ -61,13 +82,7 @@ function timerProgressDict() {
     (totalSeconds / ((config.endHour - config.startHour) * 3600)) * 100;
   progressTotal = Math.max(0, Math.min(progressTotal, 100));
 
-  let progressBreak =
-    (totalSeconds /
-      ((config.endHour -
-        config.startHour -
-        (config.breakHour + config.afternoon)) *
-        3600)) *
-    100;
+  let progressBreak = (totalSeconds / (config.morning * 3600)) * 100;
 
   return {
     currentHour: currentHour,
@@ -82,8 +97,11 @@ element_backgroundID.addEventListener("mouseover", function (event) {
   const progress = timer.progressTotal;
   const progressBreak = timer.progressBreak;
 
+  console.log(progressBreak);
+  console.log(timer);
+
   let contentBreak =
-    progressBreak > 100 && progress > 0
+    progressBreak > 100 || progress < 0
       ? ""
       : `* ${progressBreak.toFixed(2)} / 100% avant midi`;
 
@@ -101,26 +119,11 @@ function updateProgressBar() {
   const currentHour = timer.currentHour;
   const progress = timer.progressTotal;
 
-  const percentBreak12 =
-    (config.morning / (config.endHour - config.startHour)) * 100;
-  const percentBreak14 =
-    ((config.morning + config.breakHour) /
-      (config.endHour - config.startHour)) *
-    100;
-
-  element_backgroundID.style.background = `linear-gradient(to right, #242424 0%, #242424 ${percentBreak12.toFixed(
-    2
-  )}%, ${config.colorBreak} ${percentBreak12.toFixed(2)}%, ${
-    config.colorBreak
-  } ${percentBreak14.toFixed(2)}%, #242424 ${percentBreak14.toFixed(
-    2
-  )}%, #242424 100%)`;
-
   // TODO Different popup event
   if (currentHour < config.startHour + config.morning - 1) {
     element_progressID.classList = [];
   } else if (currentHour < config.startHour + config.morning) {
-    element_progressID.classList = [];
+    // element_progressID.classList = [];
     element_progressID.classList.add("stripe");
   } else if (
     currentHour <
@@ -166,10 +169,12 @@ function startBar() {
   }
 
   updateProgressBar();
+  breakBackgroundStyle();
   console.log("Progress en cours");
 
   const intervalId = setInterval(() => {
     updateProgressBar();
+    breakBackgroundStyle();
 
     if (new Date().getHours() >= config.endHour) {
       clearInterval(intervalId);
