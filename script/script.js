@@ -7,7 +7,40 @@ let config = {
   breakHour: 2,
   timerStep: 1000,
   colorBreak: "#DC143C",
+  is_active: true,
 };
+
+window.postMessage({ message: "Envois la config" }, "*");
+
+window.addEventListener("message", function (event) {
+  if (event.data.success) {
+    let config = event.data.message;
+    console.log(config);
+  }
+});
+
+// function sendMessageforConfig() {
+//   return new Promise(function (resolve, reject) {
+//     function handleMessage(event) {
+//       if (event.data.success) {
+//         window.removeEventListener("message", handleMessage);
+//         config = event.data.message;
+//         resolve();
+//       }
+//     }
+
+//     window.addEventListener("message", handleMessage);
+//     window.postMessage({ message: "Envois la config" }, "*");
+//   });
+// }
+
+// sendMessageforConfig()
+//   .then(function () {
+//     console.log("Configuration reçue :", config);
+//   })
+//   .catch(function (error) {
+//     console.log("Une erreur s'est produite :", error);
+//   });
 
 window.addEventListener("message", function (event) {
   if (event.source === window && event.data.config) {
@@ -18,12 +51,13 @@ window.addEventListener("message", function (event) {
       event.origin
     );
 
+    config.is_active ? activateProgressBar() : disableProgressBar();
+
     breakBackgroundStyle();
   }
 });
 
 // Pensez a une blacklist de site dont on ne veut pas afficher la progressBar
-
 const element_backgroundID = document.getElementById("background_bar"),
   element_progressID = document.getElementById("progress_bar");
 
@@ -38,6 +72,7 @@ function handleConfigChange(newConfig) {
   config.breakHour = newConfig.breakHour;
   config.timerStep = newConfig.timerStep;
   config.colorBreak = newConfig.colorBreak;
+  config.is_active = newConfig.is_active;
 }
 
 function breakBackgroundStyle() {
@@ -146,6 +181,12 @@ function updateProgressBar() {
 
 function startBar() {
   const now = new Date();
+  console.log(config.is_active);
+
+  if (!config.is_active) {
+    console.log("inactif");
+    return;
+  }
 
   if (now.getHours() >= config.endHour) {
     console.log("Hors temps");
@@ -182,4 +223,5 @@ function startBar() {
   }, config.timerStep);
 }
 
+breakBackgroundStyle();
 startBar();

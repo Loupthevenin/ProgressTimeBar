@@ -24,3 +24,18 @@ fetch(chrome.runtime.getURL("index.html"))
     script.src = chrome.runtime.getURL("script/script.js");
     document.body.appendChild(script);
   });
+
+window.addEventListener("message", function (event) {
+  if (event.data.message === "Envois la config") {
+    chrome.storage.local.get("config", function (data) {
+      if (data.config) {
+        console.log(data.config);
+        var config = data.config;
+        event.source.postMessage(
+          { success: true, message: config },
+          event.origin
+        );
+      }
+    });
+  }
+});

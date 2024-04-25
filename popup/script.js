@@ -11,6 +11,7 @@ let config = {
   breakHour: 2,
   timerStep: 1 * 1000,
   colorBreak: "#DC143C",
+  is_active: true,
 };
 
 function sendMessage_toInject(config) {
@@ -35,7 +36,6 @@ function loadValues() {
 }
 
 function saveValues() {
-  console.log(config);
   config.startHour = document.getElementById("startHour").value;
   config.endHour = document.getElementById("endHour").value;
   config.morning = document.getElementById("morning").value;
@@ -64,4 +64,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.getElementById("saveButton").addEventListener("click", function () {
   saveValues();
+});
+
+var active_button = document.getElementById("activeButton");
+
+active_button.addEventListener("click", function () {
+  if (active_button.classList.contains("actif")) {
+    active_button.classList.remove("actif");
+    active_button.innerText = "Inactif";
+
+    config.is_active = false;
+    saveValues();
+  } else {
+    active_button.classList.add("actif");
+    active_button.innerText = "Actif";
+
+    config.is_active = true;
+    saveValues();
+  }
 });
