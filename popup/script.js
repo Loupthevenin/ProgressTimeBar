@@ -52,11 +52,23 @@ function saveValues() {
   sendMessage_toInject(config);
 }
 
+function updateButtonState() {
+  var active_button = document.getElementById("activeButton");
+  if (config.is_active) {
+    active_button.classList.add("actif");
+    active_button.innerText = "Actif";
+  } else {
+    active_button.classList.remove("actif");
+    active_button.innerText = "Inactif";
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   chrome.storage.local.get("config", function (data) {
     if (data.config) {
       config = data.config;
       sendMessage_toInject(config);
+      updateButtonState();
     }
     loadValues();
   });
@@ -66,20 +78,8 @@ document.getElementById("saveButton").addEventListener("click", function () {
   saveValues();
 });
 
-var active_button = document.getElementById("activeButton");
-
-active_button.addEventListener("click", function () {
-  if (active_button.classList.contains("actif")) {
-    active_button.classList.remove("actif");
-    active_button.innerText = "Inactif";
-
-    config.is_active = false;
-    saveValues();
-  } else {
-    active_button.classList.add("actif");
-    active_button.innerText = "Actif";
-
-    config.is_active = true;
-    saveValues();
-  }
+document.getElementById("activeButton").addEventListener("click", function () {
+  config.is_active = !config.is_active;
+  saveValues();
+  updateButtonState();
 });

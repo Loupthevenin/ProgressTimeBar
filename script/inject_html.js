@@ -1,9 +1,14 @@
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  chrome.storage.local.set({ config: message.config }, function () {
+    console.log("Donnee save dans inject");
+  });
+
   window.postMessage({ config: message.config });
 
   sendResponse({ success: true, message: "Donnees mises à jour avec succès" });
 });
 
+// inject_html
 fetch(chrome.runtime.getURL("index.html"))
   .then((response) => response.text())
   .then((html) => {
